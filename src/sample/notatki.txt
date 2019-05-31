@@ -1,0 +1,4 @@
+interfejs:
+game object
+narysuj mnie, wykryj kolizje
+menadzer drawing na dostep do rootObject i root wywoluje draw dla swoich dzieci

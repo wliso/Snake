@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="71.97756410256412" y="0.0">sample.Segment</node>
+    <node x="0.849358974358978" y="336.0">sample.Wall</node>
+    <node x="0.0" y="448.0">sample.Board</node>
+    <node x="63.59935897435898" y="123.0">sample.Food</node>
+    <node x="166.7852564102564" y="303.0">sample.Snake</node>
+    <node x="92.84935897435898" y="202.0">sample.Head</node>
+    <node x="258.849358974359" y="213.0">sample.Body</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="sample.Head" target="sample.Segment">
+      <point x="36.5" y="-25.5" />
+      <point x="202.34935897435898" y="98.0" />
+      <point x="170.10256410256412" y="98.0" />
+      <point x="19.625" y="36.5" />
+    </edge>
+    <edge source="sample.Board" target="sample.Wall">
+      <point x="-21.0" y="-70.0" />
+      <point x="63.0" y="423.0" />
+      <point x="54.09935897435898" y="423.0" />
+      <point x="17.75" y="14.5" />
+    </edge>
+    <edge source="sample.Head" target="sample.Food">
+      <point x="-36.5" y="-25.5" />
+      <point x="129.34935897435898" y="177.0" />
+      <point x="119.84935897435898" y="177.0" />
+      <point x="18.75" y="14.5" />
+    </edge>
+    <edge source="sample.Body" target="sample.Segment">
+      <point x="0.0" y="-14.5" />
+      <point x="296.349358974359" y="98.0" />
+      <point x="209.3525641025641" y="98.0" />
+      <point x="58.87499999999997" y="36.5" />
+    </edge>
+    <edge source="sample.Snake" target="sample.Body">
+      <point x="61.33333333333334" y="-47.5" />
+      <point x="320.1185897435897" y="278.0" />
+      <point x="315.099358974359" y="278.0" />
+      <point x="18.75" y="14.5" />
+    </edge>
+    <edge source="sample.Snake" target="sample.Head">
+      <point x="-61.33333333333334" y="-47.5" />
+      <point x="197.45192307692307" y="278.0" />
+      <point x="165.84935897435898" y="278.0" />
+      <point x="0.0" y="25.5" />
+    </edge>
+    <edge source="sample.Board" target="sample.Snake">
+      <point x="63.0" y="-70.0" />
+      <point x="147.0" y="423.0" />
+      <point x="258.7852564102564" y="423.0" />
+      <point x="0.0" y="47.5" />
+    </edge>
+    <edge source="sample.Board" target="sample.Food">
+      <point x="21.0" y="-70.0" />
+      <point x="105.0" y="423.0" />
+      <point x="82.34935897435898" y="423.0" />
+      <point x="-18.75" y="14.5" />
+    </edge>
+    <edge source="sample.Wall" target="sample.Segment">
+      <point x="0.0" y="-14.5" />
+      <point x="36.34935897435898" y="98.0" />
+      <point x="91.60256410256412" y="98.0" />
+      <point x="-58.875" y="36.5" />
+    </edge>
+    <edge source="sample.Food" target="sample.Segment">
+      <point x="0.0" y="-14.5" />
+      <point x="101.09935897435898" y="98.0" />
+      <point x="130.85256410256412" y="98.0" />
+      <point x="-19.625" y="36.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.9" x="-1.8181818181818699" y="256.6363636363636" />
+  <SelectedNodes>
+    <node>sample.Segment</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

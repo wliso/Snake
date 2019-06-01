@@ -74,7 +74,7 @@ private static final int HEIGHT = 600;
             @Override
                     public void handle(ActionEvent event){
                 GameViewManager gameManager = new GameViewManager();
-                gameManager.createNewGame(mainStage,new Snake());
+                gameManager.createNewGame(mainStage);
             }
         });
     }

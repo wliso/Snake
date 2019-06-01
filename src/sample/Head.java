@@ -20,5 +20,20 @@ public class Head extends Segment {
         head.setLayoutY(GAME_HEIGHT/2);
     }
 
+    public void moveHead(){
+        if(direction.equals(Direction.RIGHT)){
+            head.setLayoutX(head.getLayoutX()+GAME_WIDTH/NUMBER_OF_SQUARES);
+        }
+        if(direction.equals(Direction.LEFT)){
+            head.setLayoutX(head.getLayoutX()-GAME_WIDTH/NUMBER_OF_SQUARES);
+        }
+        if(direction.equals(Direction.UP)){
+            head.setLayoutY(head.getLayoutY()-GAME_HEIGHT/NUMBER_OF_SQUARES);
+        }
+        if(direction.equals(Direction.DOWN)){
+            head.setLayoutY(head.getLayoutY()+GAME_HEIGHT/NUMBER_OF_SQUARES);
+        }
+    }
+
     void eat(Food food){}
 }

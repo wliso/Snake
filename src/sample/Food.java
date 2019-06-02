@@ -27,5 +27,4 @@ public class Food extends Segment {
         ((ImageView) node).setFitHeight(GAME_HEIGHT/NUMBER_OF_SQUARES);
         node.setId("food");
     }
-
 }

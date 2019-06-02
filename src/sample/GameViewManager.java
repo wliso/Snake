@@ -126,7 +126,6 @@ public class GameViewManager {
         }while(!isEmpty(x,y));
         food.getNode().setLayoutX(x);
         food.getNode().setLayoutY(y);
-        System.out.println("x fooda:" + food.getNode().getLayoutX() + ", y fooda: " + food.getNode().getLayoutY());
         gamePane.getChildren().add(food.getNode());
         objects.add(food);
     }
@@ -145,20 +144,16 @@ public class GameViewManager {
         if (wspPom.equals(WspPom.DOWN)){
             snake.setDirection(Head.Direction.DOWN);
         }
-        System.out.println("x snake: " + snake.head.getNode().getLayoutX() + ", y snake: " + snake.head.getNode().getLayoutY());
         collision(snake.head.getNode().getLayoutX(),snake.head.getNode().getLayoutY());
     }
     
     boolean isEmpty(double x, double y){
         for (int i=0;i<objects.size();i++) {
-            System.out.println("node x : " + objects.get(i).getNode().getLayoutX() + " node y : " + objects.get(i).getNode().getLayoutY());
             if(objects.get(i).getNode().getLayoutX() == x && objects.get(i).getNode().getLayoutY() == y){
                 if(objects.get(i).getid() != "head"){
-                System.out.println("nie jest puste");
                 return false;
                 }
             }
-
         }
         return true;
     }
@@ -180,12 +175,10 @@ public class GameViewManager {
 
     public void collision(double x,double y){
         if(!isEmpty(x,y)){
-            System.out.println("collisssion");
             Segment seg = whatType(x,y);
             switch (seg.getid()){
                 case "food":
                     collisionFood();
-                    System.out.println("COOOLLLISSSION FOOOD");
                     break;
                 case "body":
 
@@ -206,33 +199,18 @@ public class GameViewManager {
         objects.add(snake.segments.get(snake.segments.size()-1));
         createFood();
     }
-    private void deleteFoodFromObjects(){
+
+    private void deleteFood(){
         try{
             for (Segment seg: objects) {
                 if(seg.getid().equals("food")) {
+                    gamePane.getChildren().get(gamePane.getChildren().indexOf(seg.getNode())).setVisible(false);
                     objects.remove(seg);
                 }
             }
         } catch(ConcurrentModificationException e){
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
         }
-    }
-
-/*    private void deleteFoodFromGamePane(){
-        try{
-            for (Node node: gamePane.getChildren()) {
-                if(node.getId().equals("food")) {
-                    gamePane.getChildren().remove(node);
-                }
-            }
-        } catch(ConcurrentModificationException e){
-            System.out.println(e.getMessage());
-        }
-    }*/
-
-    private void deleteFood(){
-        deleteFoodFromObjects();
-        //deleteFoodFromGamePane();
     }
 
 }

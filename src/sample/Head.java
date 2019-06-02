@@ -5,7 +5,13 @@ import javafx.scene.image.ImageView;
 
 public class Head extends Segment {
 
-    public Node head;
+    private Node node;
+    public String getid(){
+        return "head";
+    }
+    public Node getNode(){
+        return node;
+    }
     private static final int GAME_WIDTH = 600;
     private static final int GAME_HEIGHT = 600;
     private static final int NUMBER_OF_SQUARES = 30;
@@ -13,25 +19,26 @@ public class Head extends Segment {
     private String HEADS_URL = "resources/pixeluipack/9-Slice/Colored/green_pressed.png";
 
     Head(){
-        head = new ImageView(HEADS_URL);
-        ((ImageView) head).setFitWidth(GAME_WIDTH/NUMBER_OF_SQUARES);
-        ((ImageView) head).setFitHeight(GAME_HEIGHT/NUMBER_OF_SQUARES);
-        head.setLayoutX(GAME_WIDTH/2);
-        head.setLayoutY(GAME_HEIGHT/2);
+        node = new ImageView(HEADS_URL);
+        ((ImageView) node).setFitWidth(GAME_WIDTH/NUMBER_OF_SQUARES);
+        ((ImageView) node).setFitHeight(GAME_HEIGHT/NUMBER_OF_SQUARES);
+        node.setLayoutX(GAME_WIDTH/2);
+        node.setLayoutY(GAME_HEIGHT/2);
+        node.setId("head");
     }
 
     public void moveHead(){
         if(direction.equals(Direction.RIGHT)){
-            head.setLayoutX(head.getLayoutX()+GAME_WIDTH/NUMBER_OF_SQUARES);
+            node.setLayoutX(node.getLayoutX()+GAME_WIDTH/NUMBER_OF_SQUARES);
         }
         if(direction.equals(Direction.LEFT)){
-            head.setLayoutX(head.getLayoutX()-GAME_WIDTH/NUMBER_OF_SQUARES);
+            node.setLayoutX(node.getLayoutX()-GAME_WIDTH/NUMBER_OF_SQUARES);
         }
         if(direction.equals(Direction.UP)){
-            head.setLayoutY(head.getLayoutY()-GAME_HEIGHT/NUMBER_OF_SQUARES);
+            node.setLayoutY(node.getLayoutY()-GAME_HEIGHT/NUMBER_OF_SQUARES);
         }
         if(direction.equals(Direction.DOWN)){
-            head.setLayoutY(head.getLayoutY()+GAME_HEIGHT/NUMBER_OF_SQUARES);
+            node.setLayoutY(node.getLayoutY()+GAME_HEIGHT/NUMBER_OF_SQUARES);
         }
     }
 

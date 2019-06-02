@@ -1,22 +1,21 @@
 package sample;
 
 import javafx.animation.AnimationTimer;
-import javafx.concurrent.Task;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Control;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
+import java.io.Console;
+import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
-
-import static sample.GameViewManager.WspPom.*;
+import java.util.Random;
 
 public class GameViewManager {
     private AnchorPane gamePane;
@@ -28,13 +27,10 @@ public class GameViewManager {
 
     private static final int NUMBER_OF_SQUARES = 30;
 
+    private List<Segment> objects = new ArrayList<Segment>();
     private Stage menuStage;
     private Snake snake;
 
-    private boolean isLeftPressed;
-    private boolean isRightPressed;
-    private boolean isUpPressed;
-    private boolean isDownPressed;
     public enum WspPom {
         RIGHT, LEFT, UP,DOWN,NONE;
     }
@@ -50,18 +46,18 @@ public class GameViewManager {
         gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                    if (event.getCode() == KeyCode.LEFT) {
-                        wspPom = WspPom.LEFT;
-                    } else if (event.getCode() == KeyCode.RIGHT) {
-                        wspPom = WspPom.RIGHT;
-                    } else if (event.getCode() == KeyCode.UP) {
-                        wspPom = WspPom.UP;
-                    } else if (event.getCode() == KeyCode.DOWN) {
-                        wspPom = WspPom.DOWN;
-                    }
+                if (event.getCode() == KeyCode.LEFT) {
+                    wspPom = WspPom.LEFT;
+                } else if (event.getCode() == KeyCode.RIGHT) {
+                    wspPom = WspPom.RIGHT;
+                } else if (event.getCode() == KeyCode.UP) {
+                    wspPom = WspPom.UP;
+                } else if (event.getCode() == KeyCode.DOWN) {
+                    wspPom = WspPom.DOWN;
+                }
             }
         });
-
+        
         gameScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -93,7 +89,7 @@ public class GameViewManager {
             gamePane.getChildren().add(line2);
         }
         createSnake();
-
+        createFood();
         CreateGameLoop();
         gameStage.show();
     }
@@ -113,31 +109,130 @@ public class GameViewManager {
 
     private void createSnake(){
         snake = new Snake();
-        gamePane.getChildren().add(this.snake.head.head);
+        gamePane.getChildren().add(this.snake.head.getNode());
         snake.addBody();
         snake.addBody();
         gamePane.getChildren().addAll(snake.fromListBodyToListNode());
+        objects.addAll(snake.nodes);
+    }
+
+    private void createFood(){
+        Food food = new Food();
+        double x,y;
+        do{
+            Random rand = new Random();
+            x = (double)rand.nextInt(NUMBER_OF_SQUARES)*GAME_WIDTH/NUMBER_OF_SQUARES;
+            y = (double)rand.nextInt(NUMBER_OF_SQUARES)*GAME_HEIGHT/NUMBER_OF_SQUARES;
+        }while(!isEmpty(x,y));
+        food.getNode().setLayoutX(x);
+        food.getNode().setLayoutY(y);
+        System.out.println("x fooda:" + food.getNode().getLayoutX() + ", y fooda: " + food.getNode().getLayoutY());
+        gamePane.getChildren().add(food.getNode());
+        objects.add(food);
     }
 
     private void moveSnake(){
 
         if(wspPom.equals(WspPom.RIGHT)){
-            //snake.head.head.setLayoutX(snake.head.head.getLayoutX()+GAME_WIDTH/NUMBER_OF_SQUARES);
             snake.setDirection(Head.Direction.RIGHT);
         }
         if (wspPom.equals(WspPom.LEFT)){
-            //snake.head.head.setLayoutX(snake.head.head.getLayoutX()-GAME_WIDTH/NUMBER_OF_SQUARES);
             snake.setDirection(Head.Direction.LEFT);
         }
         if (wspPom.equals(WspPom.UP)){
-            //snake.head.head.setLayoutY(snake.head.head.getLayoutY()-GAME_HEIGHT/NUMBER_OF_SQUARES);
             snake.setDirection(Head.Direction.UP);
         }
         if (wspPom.equals(WspPom.DOWN)){
-            //snake.head.head.setLayoutY(snake.head.head.getLayoutY()+GAME_HEIGHT/NUMBER_OF_SQUARES);
             snake.setDirection(Head.Direction.DOWN);
+        }
+        System.out.println("x snake: " + snake.head.getNode().getLayoutX() + ", y snake: " + snake.head.getNode().getLayoutY());
+        collision(snake.head.getNode().getLayoutX(),snake.head.getNode().getLayoutY());
+    }
+    
+    boolean isEmpty(double x, double y){
+        for (int i=0;i<objects.size();i++) {
+            System.out.println("node x : " + objects.get(i).getNode().getLayoutX() + " node y : " + objects.get(i).getNode().getLayoutY());
+            if(objects.get(i).getNode().getLayoutX() == x && objects.get(i).getNode().getLayoutY() == y){
+                if(objects.get(i).getid() != "head"){
+                System.out.println("nie jest puste");
+                return false;
+                }
+            }
+
+        }
+        return true;
+    }
+    Segment whatType(double x, double y){
+        for (int i=0;i<objects.size();i++) {
+            if(objects.get(i).getNode().getLayoutX() == x && objects.get(i).getNode().getLayoutY() == y) {
+                switch (objects.get(i).getid()) {
+                    case "body":
+                        return new Body(x,y);
+                    case "wall":
+                        return new Wall();
+                    case "food":
+                        return new Food();
+                }
+            }
+        }
+        return null;
+    }
+
+    public void collision(double x,double y){
+        if(!isEmpty(x,y)){
+            System.out.println("collisssion");
+            Segment seg = whatType(x,y);
+            switch (seg.getid()){
+                case "food":
+                    collisionFood();
+                    System.out.println("COOOLLLISSSION FOOOD");
+                    break;
+                case "body":
+
+                    break;
+                case "wall":
+
+                    break;
+            }
         }
     }
 
+    private void collisionBody(){}
+
+    private void collisionFood(){
+        deleteFood();
+        snake.addBody();
+        gamePane.getChildren().add(snake.segments.get(snake.segments.size()-1).getNode());
+        objects.add(snake.segments.get(snake.segments.size()-1));
+        createFood();
+    }
+    private void deleteFoodFromObjects(){
+        try{
+            for (Segment seg: objects) {
+                if(seg.getid().equals("food")) {
+                    objects.remove(seg);
+                }
+            }
+        } catch(ConcurrentModificationException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+/*    private void deleteFoodFromGamePane(){
+        try{
+            for (Node node: gamePane.getChildren()) {
+                if(node.getId().equals("food")) {
+                    gamePane.getChildren().remove(node);
+                }
+            }
+        } catch(ConcurrentModificationException e){
+            System.out.println(e.getMessage());
+        }
+    }*/
+
+    private void deleteFood(){
+        deleteFoodFromObjects();
+        //deleteFoodFromGamePane();
+    }
 
 }

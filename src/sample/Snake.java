@@ -13,21 +13,23 @@ public class Snake {
     private static final int NUMBER_OF_SQUARES = 30;
 
     public Head head;
+
     List<Body> segments = new ArrayList<Body>();
-    //List<Node> segments2 = new ArrayList<Node>();
+    List<Segment> nodes = new ArrayList<Segment>();
     int speed;
 
     Snake(){
         head = new Head();
         head.direction = Head.Direction.UP;
+        nodes.add(head);
     }
 
     public List<Node> fromListBodyToListNode(){
-        List<Node> nodes = new ArrayList<Node>();
+        List<Node> nodess = new ArrayList<Node>();
         for(int i=0;i<segments.size();i++){
-            nodes.add(segments.get(i).body);
+            nodess.add(segments.get(i).getNode());
         }
-        return nodes;
+        return nodess;
     }
 
     public void addBody(){
@@ -36,35 +38,39 @@ public class Snake {
         Body body;
         if(segments.size()==0){
             direction = head.direction;
-            x = head.head.getLayoutX();
-            y = head.head.getLayoutY();
+            x = head.getNode().getLayoutX();
+            y = head.getNode().getLayoutY();
 
         }
         else {
             direction = segments.get(segments.size()-1).direction;
-            x = segments.get(segments.size()-1).body.getLayoutX();
-            y = segments.get(segments.size()-1).body.getLayoutY();
+            x = segments.get(segments.size()-1).getNode().getLayoutX();
+            y = segments.get(segments.size()-1).getNode().getLayoutY();
         }
 
         if(direction.equals(Segment.Direction.RIGHT)){
             body = new Body(x - GAME_WIDTH/NUMBER_OF_SQUARES,y);
             body.direction = direction;
             segments.add(body);
+            nodes.add(body);
         }
         if(direction.equals(Segment.Direction.LEFT)){
             body = new Body(x + GAME_WIDTH/NUMBER_OF_SQUARES,y);
             body.direction = direction;
             segments.add(body);
+            nodes.add(body);
         }
         if(direction.equals(Segment.Direction.UP)){
             body = new Body(x,y + GAME_HEIGHT/NUMBER_OF_SQUARES);
             body.direction = direction;
             segments.add(body);
+            nodes.add(body);
         }
         if(direction.equals(Segment.Direction.DOWN)){
             body = new Body(x,y - GAME_HEIGHT/NUMBER_OF_SQUARES);
             body.direction = direction;
             segments.add(body);
+            nodes.add(body);
         }
     }
 

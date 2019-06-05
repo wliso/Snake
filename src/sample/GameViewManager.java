@@ -45,6 +45,10 @@ public class GameViewManager {
     private Stage menuStage;
     private Snake snake;
 
+    private SmallInfoLabel pointsLabel;
+    private int points = 0;
+    private Wall wall;
+    private Board board;
     public enum WspPom {
         RIGHT, LEFT, UP,DOWN,NONE;
     }
@@ -105,6 +109,12 @@ public class GameViewManager {
             gamePane.getChildren().add(line);
             gamePane.getChildren().add(line2);
         }
+       // pointsLabel = new SmallInfoLabel("POINTS: 00");
+        //pointsLabel.setLayoutX(460);
+        //pointsLabel.setLayoutY(0);
+        //gamePane.getChildren().add(pointsLabel);
+
+        createWall();
         createSnake();
         createFood();
         CreateGameLoop();
@@ -117,13 +127,18 @@ public class GameViewManager {
             public void handle(long now) {
                 moveSnake();
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(100);
                 } catch(InterruptedException e){}
             }
         };
         gameTimer.start();
     }
 
+    private void createWall(){
+        board = new Board();
+        board.AddWall();
+        gamePane.getChildren().addAll(board.fromListWallToListNode());
+    }
     private void createSnake(){
         snake = new Snake();
         gamePane.getChildren().add(this.snake.head.getNode());
@@ -181,7 +196,7 @@ public class GameViewManager {
                     case "body":
                         return new Body(x,y);
                     case "wall":
-                        return new Wall();
+                        return new Wall(x, y);
                     case "food":
                         return new Food();
                 }
@@ -215,7 +230,7 @@ public class GameViewManager {
         gamePane.getChildren().clear();
 
         StackPane root = new StackPane();
-        Text text = new Text(" GAME OVER \n\n" + "YOUR SCORE:"+returnScore()+"\n\n RERUN YOUR APP TO GAME AGAIN");
+        Text text = new Text(" GAME OVER \n\n" + "YOUR SCORE:"+points+"\n\n RERUN YOUR APP TO GAME AGAIN");
         text.setTextAlignment(TextAlignment.CENTER);
         Button button = new Button("My Button");
         //root.getChildren().addAll((Collection<? extends Node>) button);
@@ -235,7 +250,7 @@ public class GameViewManager {
         gameOver();
     }
     private void collisionWall(){
-        System.out.println("game");
+        gameOver();
     }
 
 
@@ -244,6 +259,12 @@ public class GameViewManager {
         snake.addBody();
         gamePane.getChildren().add(snake.segments.get(snake.segments.size()-1).getNode());
         objects.add(snake.segments.get(snake.segments.size()-1));
+      //  points++;
+      //  String textToSet = "POINTS : ";
+       // if(points <10){
+      //      textToSet = textToSet + "0";
+     //   }
+     //   pointsLabel.setText(textToSet + points);
         createFood();
     }
 

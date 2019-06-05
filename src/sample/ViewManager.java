@@ -28,6 +28,8 @@ private static final int HEIGHT = 600;
     private final static int MENU_BUTTONS_START_Y = 150;
 
     private SnakeSubscene scoresSubscene;
+    private SnakeSubscene settingsSubscene;
+    private SnakeSubscene sceneToHide;
 
     List<SnakeButton> menuButtons;
 
@@ -44,11 +46,20 @@ private static final int HEIGHT = 600;
 
     }
 
+    private void showSubScene(SnakeSubscene subScene){
+        if(sceneToHide != null){
+            sceneToHide.moveSubScene();
+        }
+        subScene.moveSubScene();
+        sceneToHide = subScene;
+    }
 
-
-    public void createSubScenes(){
+    private void createSubScenes(){
         scoresSubscene = new SnakeSubscene();
         mainPane.getChildren().add(scoresSubscene);
+
+        settingsSubscene = new SnakeSubscene();
+        mainPane.getChildren().add(settingsSubscene);
     }
 
     public Stage getMainStage(){
@@ -65,6 +76,7 @@ private static final int HEIGHT = 600;
     private void createButtons(){
         createStartButton();
         createScoresButton();
+        settingsButton();
         createExitButton();
     }
 
@@ -89,7 +101,20 @@ private static final int HEIGHT = 600;
 
             @Override
             public void handle(ActionEvent event){
-                scoresSubscene.moveSubScene();
+                showSubScene(scoresSubscene);
+            }
+        });
+    }
+
+    private void settingsButton(){
+        SnakeButton settingsButton = new SnakeButton("SETTINGS");
+        addMenuButton(settingsButton);
+
+        settingsButton.setOnAction(new EventHandler<ActionEvent>(){
+
+            @Override
+            public void handle(ActionEvent event){
+                showSubScene(settingsSubscene);
             }
         });
     }

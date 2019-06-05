@@ -1,12 +1,12 @@
 package sample;
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.*;
 
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.effect.*;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -16,18 +16,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Line;
 import javafx.scene.text.*;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.scene.paint.Stop;
-import javafx.application.Platform;
-import javax.swing.text.View;
-import javax.xml.validation.SchemaFactoryConfigurationError;
-import java.io.Console;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import javafx.application.Application;
 import javafx.scene.text.Text;
 import javafx.scene.layout.StackPane;
 
@@ -38,12 +30,14 @@ public class GameViewManager {
 
     private static final int GAME_WIDTH = 600;
     private static final int GAME_HEIGHT = 600;
-
+    private static int tura = 0;
+    private static int time=100;
     private static final int NUMBER_OF_SQUARES = 30;
-
+    private static int i=1;
     private List<Segment> objects = new ArrayList<Segment>();
     private Stage menuStage;
     private Snake snake;
+    private Food frog;
 
     private SmallInfoLabel pointsLabel;
     private int points = 0;
@@ -54,7 +48,7 @@ public class GameViewManager {
     }
     WspPom wspPom = WspPom.NONE;
     private AnimationTimer gameTimer;
-
+    private boolean isFrog = false;
     public GameViewManager(){
         initializeStage();
         createKeyListeners();
@@ -113,7 +107,9 @@ public class GameViewManager {
         //pointsLabel.setLayoutX(460);
         //pointsLabel.setLayoutY(0);
         //gamePane.getChildren().add(pointsLabel);
-
+        createBarrier();
+        createBarrier();
+        createBarrier();
         createWall();
         createSnake();
         createFood();
@@ -126,8 +122,12 @@ public class GameViewManager {
             @Override
             public void handle(long now) {
                 moveSnake();
+                if(isFrog && i % 3 == 0 ) {
+                    makeMove();
+                }
+                i++;
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(time);
                 } catch(InterruptedException e){}
             }
         };
@@ -138,6 +138,7 @@ public class GameViewManager {
         board = new Board();
         board.AddWall();
         gamePane.getChildren().addAll(board.fromListWallToListNode());
+        objects.addAll(board.wallList);
     }
     private void createSnake(){
         snake = new Snake();
@@ -148,8 +149,42 @@ public class GameViewManager {
         objects.addAll(snake.nodes);
     }
 
+    private void createBarrier(){
+        Wall wall = new Wall();
+        double x,y;
+        do{
+            Random rand = new Random();
+            x = (double)rand.nextInt(NUMBER_OF_SQUARES)*GAME_WIDTH/NUMBER_OF_SQUARES;
+            y = (double)rand.nextInt(NUMBER_OF_SQUARES)*GAME_HEIGHT/NUMBER_OF_SQUARES;
+        }while(!isEmpty(x,y));
+        wall.getNode().setLayoutX(x);
+        wall.getNode().setLayoutY(y);
+        gamePane.getChildren().add(wall.getNode());
+        objects.add(wall);
+    }
+
     private void createFood(){
-        Food food = new Food();
+        tura++;
+        Food food;
+        if(tura % 5 == 1 && tura > 5) time = 500;
+        else time = 100;
+        if(tura % 3 == 0){
+            food = new Food("pizza");
+            snake.addBody();
+            gamePane.getChildren().add(snake.segments.get(snake.segments.size()-1).getNode());
+            objects.add(snake.segments.get(snake.segments.size()-1));
+        }
+        else if(tura % 5 == 0)
+            food = new Food("apple");
+        else if(tura % 7 == 0){
+            food = new Food("frog");
+            frog = food;
+            isFrog = true;
+            time = 200;
+        }
+        else
+            food = new Food("cherry");
+
         double x,y;
         do{
             Random rand = new Random();
@@ -198,7 +233,7 @@ public class GameViewManager {
                     case "wall":
                         return new Wall(x, y);
                     case "food":
-                        return new Food();
+                        return new Food("cherry");
                 }
             }
         }
@@ -226,14 +261,58 @@ public class GameViewManager {
         int score = snake.segments.size();
         return score;
     }
+
+    public void makeMove(){
+        Random rand = new Random();
+        double x=frog.getNode().getLayoutX(),y=frog.getNode().getLayoutY();
+        do {
+            int dir = rand.nextInt() % 4;
+            switch(dir){
+                case 0: //right
+                    x = (int)frog.getNode().getLayoutX()+GAME_WIDTH/NUMBER_OF_SQUARES;
+                    y = (int)frog.getNode().getLayoutY();
+                    break;
+                case 1: //left
+                    x = (int)frog.getNode().getLayoutX()-GAME_WIDTH/NUMBER_OF_SQUARES;
+                    y = (int)frog.getNode().getLayoutY();
+                    break;
+                case 2: //up
+                    x = (int)frog.getNode().getLayoutX();
+                    y = (int)frog.getNode().getLayoutY()-GAME_HEIGHT/NUMBER_OF_SQUARES;
+                    break;
+                case 3: //down
+                    x = (int)frog.getNode().getLayoutX();
+                    y = (int)frog.getNode().getLayoutY()+GAME_HEIGHT/NUMBER_OF_SQUARES;
+                    break;
+            }
+        }while(!isEmpty(x,y));
+        frog.getNode().setLayoutX(x);
+        frog.getNode().setLayoutY(y);
+    }
+
     public void gameOver(){
         gamePane.getChildren().clear();
 
         StackPane root = new StackPane();
-        Text text = new Text(" GAME OVER \n\n" + "YOUR SCORE:"+points+"\n\n RERUN YOUR APP TO GAME AGAIN");
+        Text text = new Text(" GAME OVER \n\n" + "YOUR SCORE:"+(returnScore()-2)+"\n\n RERUN YOUR APP TO GAME AGAIN");
         text.setTextAlignment(TextAlignment.CENTER);
+        text.setLayoutY(300);
         Button button = new Button("My Button");
-        //root.getChildren().addAll((Collection<? extends Node>) button);
+
+        //SnakeButton returnButton = new SnakeButton("MENU");
+        //root.getChildren().add(returnButton);
+        //returnButton.setLayoutY(text.getLayoutY()+100);
+        //returnButton.setOnAction(new EventHandler<ActionEvent>(){
+
+/*            @Override
+            public void handle(ActionEvent event){
+                *//**//*ViewManager view = new ViewManager();
+                menuStage = view.getMainStage();
+                gameStage.hide();
+                menuStage.show();
+            }
+        });*/
+
         root.getChildren().add(text);
         root.setStyle("-fx-font-size: 16pt;\n" +
                 "    -fx-font-family: \"Courier New\";\n" +

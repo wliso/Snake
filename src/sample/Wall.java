@@ -16,7 +16,14 @@ public class Wall extends Segment {
     private static final int GAME_HEIGHT = 600;
     private static final int NUMBER_OF_SQUARES = 30;
 
-    private String WALL_URL = "resources/pixeluipack/9-Slice/Colored/green_pressed.png";
+    private String WALL_URL = "resources/pixeluipack/9-Slice/Colored/red_pressed.png";
+
+    Wall(){
+        node = new ImageView(WALL_URL);
+        ((ImageView) node).setFitWidth(GAME_WIDTH/NUMBER_OF_SQUARES);
+        ((ImageView) node).setFitHeight(GAME_HEIGHT/NUMBER_OF_SQUARES);
+        node.setId("wall");
+    }
     Wall(double x, double y){
         node = new ImageView(WALL_URL);
         ((ImageView) node).setFitWidth(GAME_WIDTH/NUMBER_OF_SQUARES);

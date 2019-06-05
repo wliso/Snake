@@ -13,7 +13,7 @@ import java.io.FileNotFoundException;
 
 public class SnakeButton extends Button {
 
-    private final String FONT_PATH= "C:\\Users\\Weronika\\Desktop\\studia\\SEMESTR 6\\.NET i Java\\Snake\\src\\resources\\menu\\kenvector_future_thin.ttf";
+    private final String FONT_PATH= "C:\\Users\\Pablo\\Desktop\\Snake\\Snake\\src\\resources\\menu\\kenvector_future_thin.ttf";
     private final String BUTTON_PRESSED_STYLE = "-fx-background-color: transparent; -fx-background-image: url('resources/menu/green_button03.png');";
     private final String BUTTON_FREE_STYLE = "-fx-background-color: transparent; -fx-background-image: url('resources/menu/green_button02.png');";
 

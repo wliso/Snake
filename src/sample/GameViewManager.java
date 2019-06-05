@@ -31,6 +31,9 @@ public class GameViewManager {
     private Stage menuStage;
     private Snake snake;
 
+    private SmallInfoLabel pointsLabel;
+    private int points = 0;
+
     public enum WspPom {
         RIGHT, LEFT, UP,DOWN,NONE;
     }
@@ -88,6 +91,11 @@ public class GameViewManager {
             gamePane.getChildren().add(line);
             gamePane.getChildren().add(line2);
         }
+        pointsLabel = new SmallInfoLabel("POINTS: 00");
+        pointsLabel.setLayoutX(460);
+        pointsLabel.setLayoutY(0);
+        gamePane.getChildren().add(pointsLabel);
+
         createSnake();
         createFood();
         CreateGameLoop();
@@ -100,7 +108,7 @@ public class GameViewManager {
             public void handle(long now) {
                 moveSnake();
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(100);
                 } catch(InterruptedException e){}
             }
         };
@@ -197,6 +205,12 @@ public class GameViewManager {
         snake.addBody();
         gamePane.getChildren().add(snake.segments.get(snake.segments.size()-1).getNode());
         objects.add(snake.segments.get(snake.segments.size()-1));
+        points++;
+        String textToSet = "POINTS : ";
+        if(points <10){
+            textToSet = textToSet + "0";
+        }
+        pointsLabel.setText(textToSet + points);
         createFood();
     }
 

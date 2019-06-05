@@ -31,7 +31,13 @@ public class Snake {
         }
         return nodess;
     }
-
+    public void stop(){
+        Head.Direction direction;
+        double x,y;
+            direction = head.direction;
+            x = head.getNode().getLayoutX();
+            y = head.getNode().getLayoutY();
+    }
     public void addBody(){
         Head.Direction direction;
         double x,y;

@@ -44,7 +44,9 @@ private static final int HEIGHT = 600;
 
     }
 
-    private void createSubScenes(){
+
+
+    public void createSubScenes(){
         scoresSubscene = new SnakeSubscene();
         mainPane.getChildren().add(scoresSubscene);
     }
@@ -66,7 +68,7 @@ private static final int HEIGHT = 600;
         createExitButton();
     }
 
-    private void createStartButton(){
+    public void createStartButton(){
         SnakeButton startButton = new SnakeButton("PLAY");
         addMenuButton(startButton);
 
@@ -79,7 +81,7 @@ private static final int HEIGHT = 600;
         });
     }
 
-    private void createScoresButton(){
+    public void createScoresButton(){
         SnakeButton scoresButton = new SnakeButton("SCORES");
         addMenuButton(scoresButton);
 
@@ -104,7 +106,7 @@ private static final int HEIGHT = 600;
         });
     }
 
-    private void createBackground(){
+    public void createBackground(){
         Image backgroundImage = new Image("resources/background-elements-redux/Backgrounds/backgroundColorDesert.png",WIDTH,HEIGHT,false,true);
         BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT,BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,null);
         mainPane.setBackground(new Background(background));

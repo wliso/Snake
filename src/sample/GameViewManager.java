@@ -1,5 +1,12 @@
 package sample;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.effect.*;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -8,14 +15,21 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Line;
+import javafx.scene.text.*;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
+import javafx.scene.paint.Stop;
+import javafx.application.Platform;
+import javax.swing.text.View;
+import javax.xml.validation.SchemaFactoryConfigurationError;
 import java.io.Console;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.Random;
+import javafx.application.Application;
+import javafx.scene.text.Text;
+import javafx.scene.layout.StackPane;
 
 public class GameViewManager {
     private AnchorPane gamePane;
@@ -46,6 +60,9 @@ public class GameViewManager {
         gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.SPACE ){
+
+                }
                 if (event.getCode() == KeyCode.LEFT) {
                     wspPom = WspPom.LEFT;
                 } else if (event.getCode() == KeyCode.RIGHT) {
@@ -173,6 +190,7 @@ public class GameViewManager {
         return null;
     }
 
+
     public void collision(double x,double y){
         if(!isEmpty(x,y)){
             Segment seg = whatType(x,y);
@@ -181,16 +199,45 @@ public class GameViewManager {
                     collisionFood();
                     break;
                 case "body":
-
+                    collisionBody();
                     break;
                 case "wall":
-
+                    collisionWall();
                     break;
             }
         }
     }
+    public int returnScore(){
+        int score = snake.segments.size();
+        return score;
+    }
+    public void gameOver(){
+        gamePane.getChildren().clear();
 
-    private void collisionBody(){}
+        StackPane root = new StackPane();
+        Text text = new Text(" GAME OVER \n\n" + "YOUR SCORE:"+returnScore()+"\n\n RERUN YOUR APP TO GAME AGAIN");
+        text.setTextAlignment(TextAlignment.CENTER);
+        Button button = new Button("My Button");
+        //root.getChildren().addAll((Collection<? extends Node>) button);
+        root.getChildren().add(text);
+        root.setStyle("-fx-font-size: 16pt;\n" +
+                "    -fx-font-family: \"Courier New\";\n" +
+                "    -fx-base: rgb(132, 145, 47);\n" +
+                "    -fx-background: red;");
+        StackPane.setAlignment(text, Pos.CENTER);
+        Scene scene = new Scene(root, 600, 600);
+        gameStage.setScene(scene);
+        gameStage.show();
+
+    }
+
+    private void collisionBody(){
+        gameOver();
+    }
+    private void collisionWall(){
+        System.out.println("game");
+    }
+
 
     private void collisionFood(){
         deleteFood();
@@ -199,6 +246,8 @@ public class GameViewManager {
         objects.add(snake.segments.get(snake.segments.size()-1));
         createFood();
     }
+
+
 
     private void deleteFood(){
         try{
